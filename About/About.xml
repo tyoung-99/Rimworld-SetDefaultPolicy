@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
     <name>Set Default Policy</name>
-    <description>Adds a button to set a policy as the default. Works for outfits, food, and drug
-        policies.</description>
+    <description>Adds a button to set an outfit, food, or drug policy as the default.</description>
     <author>Bob_Bobson99</author>
     <supportedVersions>
         <li>1.5</li>
