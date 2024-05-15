@@ -1,8 +1,0 @@
-Default policy
-Use Harmony to add code to Dialogue_ManagePolicies to add button that changes Policy.id to 0, swaps id w/ Policy w/ id 0.
-Alternately
-Make subclass of Policy that can update id. Somehow turn every subclass of Policy into subclass of my subclass. Use set method in change above.
-
-Policy order
-Add dropdown to Dialogue_ManagePolicies for selecting display order.
-Ensure dropdown when assigning policies follows order, and puts default policy at top.
