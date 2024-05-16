@@ -53,7 +53,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataStorage.cs" />
     <Compile Include="Patches\Dialog_ManagePolicies_DoWindowContents.cs" />
+    <Compile Include="Patches\OutfitDatabase_DefaultOutfit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetDefaultPolicy.cs" />
   </ItemGroup>

@@ -1,8 +1,5 @@
 ﻿using HarmonyLib;
 using RimWorld;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using Verse;
@@ -20,28 +17,46 @@ namespace SetDefaultPolicy
             // y accounts for button being below 2 lines of text 32f tall, plus a 10f gap
             if (Widgets.ButtonImage(new Rect(inRect.xMax - (32f * 4 + 10f * 3), 32f * 2 + 10f, 32f, 32f), TexUI.DismissTex))
             {
-                MethodInfo GetPolicies = __instance.GetType().GetMethod("GetPolicies", BindingFlags.NonPublic | BindingFlags.Instance);
-                List<Policy> allPolicies = ((IList)GetPolicies.Invoke(__instance, null)).Cast<Policy>().ToList();
+                MethodInfo GetDefaultPolicy = __instance.GetType().GetMethod("GetDefaultPolicy", BindingFlags.NonPublic | BindingFlags.Instance);
+                Policy defaultPolicy = (Policy)GetDefaultPolicy.Invoke(__instance, null);
 
-                // 1st policy in list is default
-                if (___policyInt.id == allPolicies[0].id) { Log.Message("Policy is already default"); return; }
+                if (___policyInt.id == defaultPolicy.id) { Log.Message($"{___policyInt.label} already default"); return; }
 
-                Log.Message($"Swapping {allPolicies[0].label} with {___policyInt.label}");
-                Log.Message($"Before: {allPolicies[0].label}");
+                Log.Message($"Setting {___policyInt.label} as default");
+                Log.Message($"Old: {defaultPolicy.label}");
 
-                int swapIndex = allPolicies.FindIndex((Policy check) => check.id == ___policyInt.id);
+                SetDefault(___policyInt);
 
-                Policy temp = allPolicies[0];
-                allPolicies[0] = ___policyInt;
-                allPolicies[swapIndex] = temp;
+                defaultPolicy = (Policy)GetDefaultPolicy.Invoke(__instance, null);
+                Log.Message($"New: {defaultPolicy.label}");
+            }
+        }
 
-                allPolicies = ((IList)GetPolicies.Invoke(__instance, null)).Cast<Policy>().ToList();
-                Log.Message($"After: {allPolicies[0].label}");
+        private static void SetDefault(Policy newDefault)
+        {
+            Log.Message(newDefault.GetType().ToString());
+            switch (newDefault.GetType().ToString())
+            {
+                case "RimWorld.ApparelPolicy":
+                    DataStorage.DefaultPolicyIdOutfit = newDefault.id;
+                    Log.Message("Apparel");
+                    break;
+                case "RimWorld.FoodPolicy":
+                    DataStorage.DefaultPolicyIdFood = newDefault.id;
+                    Log.Message("Food");
+                    break;
+                case "RimWorld.DrugPolicy":
+                    DataStorage.DefaultPolicyIdDrug = newDefault.id;
+                    Log.Message("Drug");
+                    break;
+                case "RimWorld.ReadingPolicy":
+                    DataStorage.DefaultPolicyIdReading = newDefault.id;
+                    Log.Message("Reading");
+                    break;
+                default:
+                    Log.Warning("Unknown policy type");
+                    break;
             }
         }
     }
-
-
-
-
 }
